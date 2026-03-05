@@ -1,17 +1,6 @@
 package validator
 
-// TODO: implement — see issue #12
-//
-// ValidateLang checks that lang is "id" or "en".
-// Returns "id" as the default when lang is empty.
-// Returns domain.ErrInvalidLang for any other value.
-//
-// Usage:
-//   lang, err := validator.ValidateIDParam(c.Query("id"))
-//   if err != nil {
-//       response.BadRequest(c, "invalid param")
-//       return
-//   }
+// Validate checks that id is correct.
 
 import (
 	"math"
@@ -19,6 +8,15 @@ import (
 	"strconv"
 )
 
+// Returns domain.ErrInvalidIDParam for any other value.
+//
+// Usage:
+//
+//	lang, err := validator.ValidateIDParam(c.Query("id"))
+//	if err != nil {
+//	    response.BadRequest(c, "invalid param")
+//	    return
+//	}
 func ValidateIDParam(id string) (string, error) {
 	convertedId, err := strconv.Atoi(id)
 	if err != nil {
@@ -29,7 +27,7 @@ func ValidateIDParam(id string) (string, error) {
 		return "", domain.ErrInvalidIDParam
 	}
 
-	if convertedId < 0 {
+	if convertedId < 1 {
 		return "", domain.ErrInvalidIDParam
 	}
 
