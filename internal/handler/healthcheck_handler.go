@@ -1,0 +1,26 @@
+package handler
+
+import (
+	"net/http"
+	"quran-api-go/internal/domain/healthcheck"
+	"quran-api-go/pkg/response"
+
+	"github.com/gin-gonic/gin"
+)
+
+type HealthCheckHandler struct {
+	service healthcheck.HealthCheckService
+}
+
+func NewHealthCheckHandler(service healthcheck.HealthCheckService) *HealthCheckHandler {
+	return &HealthCheckHandler{service: service}
+}
+
+func (h *HealthCheckHandler) HealthCheck(c *gin.Context) {
+	health, err := h.service.HealthCheck(c)
+	if err != nil {
+		response.InternalError(c)
+		return
+	}
+	c.JSON(http.StatusOK, health)
+}

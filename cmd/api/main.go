@@ -37,10 +37,13 @@ func main() {
 		r.Use(middleware.CORS(cfg.AllowedOrigins))
 	}
 
+	healthCheckService := service.NewHealthCheckService()
+	healthCheckHandler := handler.NewHealthCheckHandler(healthCheckService)
 	surahRepo := repository.NewSurahRepository(db)
 	surahService := service.NewSurahService(surahRepo)
 	surahHandler := handler.NewSurahHandler(surahService)
 
+	r.GET("/health", healthCheckHandler.HealthCheck)
 	r.GET("/surah", surahHandler.List)
 	r.GET("/surah/:id", surahHandler.Detail)
 
