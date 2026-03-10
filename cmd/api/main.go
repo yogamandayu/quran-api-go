@@ -43,11 +43,15 @@ func main() {
 	surahRepo := repository.NewSurahRepository(db)
 	surahService := service.NewSurahService(surahRepo)
 	surahHandler := handler.NewSurahHandler(surahService)
+	ayahRepo := repository.NewAyahRepository(db)
+	ayahService := service.NewAyahService(ayahRepo)
+	ayahHandler := handler.NewAyahHandler(ayahService, surahService)
 
 	r.GET("/health", healthCheckHandler.HealthCheck)
 	r.GET("/health/ready", healthCheckHandler.ReadyCheck)
 	r.GET("/surah", surahHandler.List)
 	r.GET("/surah/:id", surahHandler.Detail)
+	r.GET("/surah/:id/ayat/:number", ayahHandler.BySurahAndNumber)
 
 	addr := fmt.Sprintf("%s:%s", cfg.ServerHost, cfg.ServerPort)
 	log.Info().Str("addr", addr).Msg("starting server")
